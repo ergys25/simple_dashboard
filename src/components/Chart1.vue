@@ -1,85 +1,101 @@
 <template>
-  <div>
-    <canvas ref="chartCanvas"></canvas>
+  <div class="chart-container">
+    <canvas ref="chartCanvas" width="800" height="400"></canvas>
   </div>
 </template>
 
 <script>
-import { Bar, reactiveData, reactiveProp } from 'vue-chartjs';
+import Chart from 'chart.js/auto';
 
 export default {
-  extends: Bar,
-  mixins: [reactiveData, reactiveProp],
-
   data() {
     return {
-      chartData: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Total Laytime',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-            data: [],
-          },
-          {
-            label: 'Avg Laytime',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-            data: [],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            },
-          }],
-        },
-      },
+      chart: null,
+      chartData: null
     };
   },
-
-  async created() {
-    await this.fetchData();
-    this.renderChart(this.chartData, this.options);
+  mounted() {
+    this.fetchChartData();
   },
-
   methods: {
-    async fetchData() {
+    async fetchChartData() {
       try {
-        // Replace the API URL with your actual endpoint
+        // Make API call to fetch data
         const response = await fetch('http://178.18.253.143:8080/sp-api/spr_topXLaytime/2024-02-01%2000:00:00&2024-02-29%2000:00:00&15');
         const data = await response.json();
 
-        // Extract data from the response
-        const records = data.recordsets[0] || [];
+        // Extracting data from the response
+        this.chartData = data.recordsets[0];
 
-        // Clear previous data
-        this.chartData.labels = [];
-        this.chartData.datasets[0].data = [];
-        this.chartData.datasets[1].data = [];
-
-        // Populate chart data
-        records.forEach(record => {
-          this.chartData.labels.push(record.Vessel);
-          this.chartData.datasets[0].data.push(record.TotalLaytime);
-          this.chartData.datasets[1].data.push(record.AvgLaytime);
-        });
+        // Create chart once data is fetched
+        this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
-  },
+    createChart() {
+      if (this.chartData) {
+        const ctx = this.$refs.chartCanvas.getContext('2d');
+
+        this.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: this.chartData.map(item => item.Vessel),
+            datasets: [
+              {
+                label: 'Total Laytime',
+                data: this.chartData.map(item => item.TotalLaytime),
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+              },
+              {
+                label: 'Average Laytime',
+                data: this.chartData.map(item => item.AvgLaytime),
+                backgroundColor: 'rgba(255, 99, 132, 0.6)'
+              }
+            ]
+          },
+          options: {
+            scales: {
+              x: {
+                stacked: true,
+                grid: {
+                  display: false
+                }
+              },
+              y: {
+                stacked: true,
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.1)'
+                },
+                ticks: {
+                  callback: function (value) {
+                    return value + 'h'; // Add 'h' to the tick value to denote hours
+                  }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: 'bottom'
+              }
+            }
+          }
+        });
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Add scoped styles if needed */
+.chart-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+/* You can add more styles as needed */
 </style>

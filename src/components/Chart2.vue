@@ -1,67 +1,84 @@
 <template>
-  <div>
-    <canvas ref="chartCanvas"></canvas>
+  <div class="chart-container">
+    <canvas ref="chartCanvas" width="800" height="400"></canvas>
   </div>
 </template>
 
 <script>
-import { Bar, mixins } from 'vue-chartjs';
+import Chart from 'chart.js/auto';
 
 export default {
-  extends: Bar,
-  mixins: [mixins.reactiveData],
-
   data() {
     return {
-      chartData: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Avg Dead Time per Berthing',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-            data: [],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            },
-          }],
-        },
-      },
+      chart: null,
+      chartData: null
     };
   },
-
-  async created() {
-    await this.fetchData();
-    this.renderChart(this.chartData, this.options);
+  mounted() {
+    this.fetchChartData();
   },
-
   methods: {
-    async fetchData() {
+    async fetchChartData() {
       try {
+        // Make API call to fetch data
         const response = await fetch('http://178.18.253.143:8080/sp-api/spr_TopXVesselsDeadTime/15');
         const data = await response.json();
-        // Assuming 'recordset' contains the data we need
-        data.recordset.forEach(record => {
-          this.chartData.labels.push(record.Vessel);
-          this.chartData.datasets[0].data.push(record.AvgDeadTimePerBerthing);
-        });
+
+        // Extracting data from the response
+        this.chartData = data.recordsets[0];
+
+        // Create chart once data is fetched
+        this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
-  },
+    createChart() {
+      if (this.chartData) {
+        const ctx = this.$refs.chartCanvas.getContext('2d');
+
+        this.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: this.chartData.map(item => item.VNAME),
+            datasets: [
+              {
+                label: 'General Avg Dead Time Per Berthing (hours)',
+                data: this.chartData.map(item => item.GenAvgDeadTimePerBerthing),
+                backgroundColor: 'rgba(54, 162, 235, 0.6)' // Blue color for bars
+              }
+            ]
+          },
+          options: {
+            scales: {
+              y: {
+                ticks: {
+                  callback: function(value) {
+                    return value + 'h'; // Add 'h' to the tick value to denote hours
+                  }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false // Hide legend for this chart
+              }
+            }
+          }
+        });
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Add scoped styles if needed */
+.chart-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width : 60%;
+
+}
 </style>

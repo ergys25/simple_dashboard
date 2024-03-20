@@ -1,77 +1,92 @@
 <template>
-  <div>
+  <div class="chart-container">
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
 <script>
-import { Pie, mixins } from 'vue-chartjs';
+import Chart from 'chart.js/auto';
 
 export default {
-  extends: Pie,
-  mixins: [mixins.reactiveData],
-
   data() {
     return {
-      chartData: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Various Metrics',
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-            data: [],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
+      chart: null,
+      chartData: null
     };
   },
-
-  async created() {
-    await this.fetchData();
-    this.renderChart(this.chartData, this.options);
+  mounted() {
+    this.fetchChartData();
   },
-
   methods: {
-    async fetchData() {
+    async fetchChartData() {
       try {
+        // Make API call to fetch data
         const response = await fetch('http://178.18.253.143:8080/sp-api/spr_Funnel/2024-02-01%2000:00:00&2024-02-29%2000:00:00');
         const data = await response.json();
-        // Assuming 'recordset' contains the data we need
-        Object.entries(data.recordset[0]).forEach(([key, value]) => {
-          // Exclude keys that are not metrics
-          if (key !== 'Date' && key !== 'Vessel') {
-            this.chartData.labels.push(key);
-            this.chartData.datasets[0].data.push(value);
-          }
-        });
+
+        // Extracting data from the response
+        this.chartData = data.recordsets[0][0];
+
+        // Create chart once data is fetched
+        this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
-  },
+    createChart() {
+      if (this.chartData) {
+        const ctx = this.$refs.chartCanvas.getContext('2d');
+
+        this.chart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['Session Time', 'Laytime', 'Connection Time', 'Transfer Time', 'Dead Time', 'Mooring Time', 'Unmooring Time'],
+            datasets: [{
+              data: [
+                this.chartData.SessionTime,
+                this.chartData.Laytime,
+                this.chartData.ConnectionTime,
+                this.chartData.TransferTime,
+                this.chartData.DeadTime,
+                this.chartData.MooringTime,
+                this.chartData.UnmooringTime
+              ],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(23, 45, 123, 0.6)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false, // To make the chart responsive
+            plugins: {
+              legend: {
+                position: 'bottom'
+              },
+              title: {
+                display: true,
+                text: 'Various Metrics'
+              }
+            }
+          }
+        });
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Add scoped styles if needed */
+.chart-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 </style>

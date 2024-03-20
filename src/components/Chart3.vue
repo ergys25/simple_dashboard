@@ -1,73 +1,92 @@
 <template>
-  <div>
-    <canvas ref="chartCanvas"></canvas>
+  <div class="chart-container">
+    <canvas ref="chartCanvas" width="800" height="400"></canvas>
   </div>
 </template>
 
 <script>
-import { Line, mixins } from 'vue-chartjs';
+import Chart from 'chart.js/auto';
 
 export default {
-  extends: Line,
-  mixins: [mixins.reactiveData],
-
   data() {
     return {
-      chartData: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Daily Berth Occupancy',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-            data: [],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [{
-            type: 'time',
-            time: {
-              unit: 'day',
-            },
-          }],
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            },
-          }],
-        },
-      },
+      chart: null,
+      chartData: null
     };
   },
-
-  async created() {
-    await this.fetchData();
-    this.renderChart(this.chartData, this.options);
+  mounted() {
+    this.fetchChartData();
   },
-
   methods: {
-    async fetchData() {
+    async fetchChartData() {
       try {
+        // Make API call to fetch data
         const response = await fetch('http://178.18.253.143:8080/sp-api/spr_occupancyByTime/2024-02-01%2000:00:00&2024-02-29%2000:00:00&0');
         const data = await response.json();
-        // Assuming 'recordset' contains the data we need
-        data.recordset.forEach(record => {
-          this.chartData.labels.push(record.Date);
-          this.chartData.datasets[0].data.push(record.DailyBerthOccupancy);
-        });
+
+        // Extracting data from the response
+        this.chartData = data.recordsets[0];
+
+        // Create chart once data is fetched
+        this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
-  },
+    createChart() {
+      if (this.chartData) {
+        const ctx = this.$refs.chartCanvas.getContext('2d');
+
+        this.chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: this.chartData.map(item => item.DT),
+            datasets: [
+              {
+                label: 'Daily Berth Occupancy',
+                data: this.chartData.map(item => item.AllBerths),
+                fill: false,
+                borderColor: 'rgba(255, 99, 132, 0.6)', // Red color for line
+                tension: 0.1 // Smoothing parameter for the line
+              }
+            ]
+          },
+          options: {
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'day' // Display data by day on X-axis
+                }
+              },
+              y: {
+                ticks: {
+                  callback: function(value) {
+                    return (value * 100).toFixed(2) + '%'; // Format Y-axis ticks as percentages
+                  }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: 'bottom'
+              }
+            }
+          }
+        });
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Add scoped styles if needed */
+.chart-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
 </style>
