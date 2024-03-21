@@ -1,13 +1,13 @@
 <template>
   <aside class="sidebar" :class="{ 'active': sidebarVisible }" @mouseenter="toggleSidebar(true)" @mouseleave="toggleSidebar(false)">
     <div class="logo">
-      <h2>Lorem Ipsum</h2>
+      <h2>Simple Dashboard</h2>
     </div>
     <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
+      <li><router-link :to="{ name: 'About' }">About</router-link></li>
+      <li><router-link :to="{ name: 'Services' }">Services</router-link></li>
+      <li><router-link :to="{ name: 'Contact' }">Contact</router-link></li>
     </ul>
   </aside>
 </template>
@@ -66,5 +66,13 @@ export default {
 
 .nav-links a:hover {
   text-decoration: underline;
+}
+
+.sample-text {
+  margin-top: 20px;
+}
+
+.sample-text p {
+  color: #ccc; /* Sample text color */
 }
 </style>

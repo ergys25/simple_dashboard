@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container">
+  <div class="chart4">
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
@@ -83,10 +83,12 @@ export default {
 </script>
 
 <style scoped>
-.chart-container {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+.chart4 {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+
 }
+
 </style>

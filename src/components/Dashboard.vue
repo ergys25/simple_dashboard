@@ -2,10 +2,10 @@
   <div>
     <Header />
     <div class="dashboard">
-      <Sidebar />
+      <Sidebar v-if="!isPhoneView" />
       <div class="content">
         <div class="main">
-          <div class="charts">
+          <div class="chart-grid">
             <div class="chart-container">
               <Chart1 />
             </div>
@@ -44,6 +44,23 @@ export default {
     Chart2,
     Chart3,
     Chart4
+  },
+  data() {
+    return {
+      isPhoneView: false
+    };
+  },
+  mounted() {
+    this.checkView();
+    window.addEventListener('resize', this.checkView);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.checkView);
+  },
+  methods: {
+    checkView() {
+      this.isPhoneView = window.innerWidth <= 600; // Adjust the breakpoint as needed
+    }
   }
 };
 </script>
@@ -57,16 +74,24 @@ export default {
 .content {
   flex: 1;
   padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .main {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
-.charts {
+.chart-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2, 1fr); /* Display the charts in a 2x2 grid */
+  grid-gap: 20px;
+  max-width: 1200px; /* Adjust the max width based on your layout */
+  width: 100%;
+  justify-content: center;
 }
 
 .chart-container {
@@ -74,6 +99,8 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px; /* Increase padding to make the items larger */
+  transition: all 0.3s;
 }
 
 .chart-container canvas {
@@ -81,43 +108,9 @@ export default {
   height: 100%;
 }
 
-.sidebar {
-  width: 200px;
-  background-color: #343a40;
-  color: white;
-}
-
-.sidebar h1 {
-  padding: 20px;
-  margin: 0;
-}
-
-.sidebar .menu {
-  padding: 20px;
-}
-
-.menu a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 10px 0;
-}
-
-.menu a:hover {
-  background-color: #555;
-}
-
-.header {
-  background-color: #343a40;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-
-.footer {
-  background-color: #343a40;
-  color: white;
-  padding: 20px;
-  text-align: center;
+@media only screen and (max-width: 600px) {
+  .chart-grid {
+    grid-template-columns: repeat(1, 1fr); /* Change to one column for phones */
+  }
 }
 </style>
