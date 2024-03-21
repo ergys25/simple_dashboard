@@ -1,6 +1,6 @@
 <template>
-  <div class="chart2">
-    <canvas ref="chartCanvas" width="800" height="400"></canvas>
+  <div class="chart3-container">
+    <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
@@ -20,14 +20,11 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // Make API call to fetch data
-        const response = await fetch('http://178.18.253.143:8080/sp-api/spr_TopXVesselsDeadTime/15');
+        const response = await fetch('http://178.18.253.143:8080/sp-api/spr_occupancyByTime/2024-02-01%2000:00:00&2024-02-29%2000:00:00&0');
         const data = await response.json();
 
-        // Extracting data from the response
         this.chartData = data.recordsets[0];
 
-        // Create chart once data is fetched
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -38,30 +35,39 @@ export default {
         const ctx = this.$refs.chartCanvas.getContext('2d');
 
         this.chart = new Chart(ctx, {
-          type: 'bar',
+          type: 'line',
           data: {
-            labels: this.chartData.map(item => item.VNAME),
+            labels: this.chartData.map(item => item.DT),
             datasets: [
               {
-                label: 'General Avg Dead Time Per Berthing (hours)',
-                data: this.chartData.map(item => item.GenAvgDeadTimePerBerthing),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                label: 'Daily Berth Occupancy',
+                data: this.chartData.map(item => item.AllBerths),
+                fill: false,
+                borderColor: 'rgba(255, 99, 132, 0.6)',
+                tension: 0.1
               }
             ]
           },
           options: {
             scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'day'
+                }
+              },
               y: {
                 ticks: {
                   callback: function(value) {
-                    return value + 'h';
+                    return (value * 100).toFixed(2) + '%';
                   }
                 }
               }
             },
             plugins: {
               legend: {
-                display: false
+                display: true,
+                position: 'bottom'
               }
             }
           }
@@ -73,10 +79,14 @@ export default {
 </script>
 
 <style scoped>
-.chart2 {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-
+.chart3-container {
+  width: 90%;
+  height: 90%;
+  max-width: 800px;
+  max-height: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

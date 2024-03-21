@@ -1,6 +1,6 @@
 <template>
-  <div class="chart2">
-    <canvas ref="chartCanvas" width="800" height="400"></canvas>
+  <div class="chart2-container">
+    <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
@@ -20,14 +20,12 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // Make API call to fetch data
         const response = await fetch('http://178.18.253.143:8080/sp-api/spr_TopXVesselsDeadTime/15');
         const data = await response.json();
 
-        // Extracting data from the response
         this.chartData = data.recordsets[0];
 
-        // Create chart once data is fetched
+
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -73,10 +71,14 @@ export default {
 </script>
 
 <style scoped>
-.chart2 {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-
+.chart2-container {
+  width: 90%;
+  height: 90%;
+  max-width: 800px;
+  max-height: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

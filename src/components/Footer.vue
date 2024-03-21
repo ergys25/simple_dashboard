@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  // Footer component logic
+
 };
 </script>
 

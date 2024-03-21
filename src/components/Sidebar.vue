@@ -4,10 +4,10 @@
       <h2>Simple Dashboard</h2>
     </div>
     <ul class="nav-links">
-      <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
-      <li><router-link :to="{ name: 'About' }">About</router-link></li>
-      <li><router-link :to="{ name: 'Services' }">Services</router-link></li>
-      <li><router-link :to="{ name: 'Contact' }">Contact</router-link></li>
+      <li><router-link :to="{ name: 'Chart1' }">Chart 1</router-link></li>
+      <li><router-link :to="{ name: 'Chart2' }">Chart 2</router-link></li>
+      <li><router-link :to="{ name: 'Chart3' }">Chart 3</router-link></li>
+      <li><router-link :to="{ name: 'Chart4' }">Chart 4</router-link></li>
     </ul>
   </aside>
 </template>
@@ -30,19 +30,19 @@ export default {
 
 <style scoped>
 .sidebar {
-  background-color: #333; /* Dark background color */
-  color: #fff; /* White text color */
+  background-color: #2c3e50;
+  color: #fff;
   width: 250px;
   height: 100%;
   position: fixed;
   top: 0;
-  left: -230px; /* Initially hide the sidebar */
-  transition: left 0.3s ease; /* Add transition effect */
+  left: -250px;
+  transition: left 0.3s ease;
   padding: 20px;
 }
 
 .sidebar.active {
-  left: 0; /* Move the sidebar to display */
+  left: 0;
 }
 
 .logo h2 {
@@ -62,10 +62,16 @@ export default {
 .nav-links a {
   text-decoration: none;
   color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .nav-links a:hover {
   text-decoration: underline;
+}
+
+.sidebar:hover .nav-links a {
+  opacity: 1;
 }
 
 .sample-text {
@@ -73,6 +79,6 @@ export default {
 }
 
 .sample-text p {
-  color: #ccc; /* Sample text color */
+  color: #ccc;
 }
 </style>

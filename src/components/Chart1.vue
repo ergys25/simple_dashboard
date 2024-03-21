@@ -1,33 +1,37 @@
 <template>
+  <!-- Chart container -->
   <div class="chart1">
+    <!-- Canvas for the chart -->
     <canvas ref="chartCanvas" width="800" height="400"></canvas>
   </div>
 </template>
 
 <script>
+// Importing Chart.js library
 import Chart from 'chart.js/auto';
 
 export default {
   data() {
     return {
-      chart: null,
-      chartData: null
+      chart: null, // Will hold the chart instance
+      chartData: null // Will hold the fetched data
     };
   },
   mounted() {
+    // Fetch chart data when component is mounted
     this.fetchChartData();
   },
   methods: {
     async fetchChartData() {
       try {
-        // Make API call to fetch data
+        // Fetch data from the API
         const response = await fetch('http://178.18.253.143:8080/sp-api/spr_topXLaytime/2024-02-01%2000:00:00&2024-02-29%2000:00:00&15');
         const data = await response.json();
 
-        // Extracting data from the response
+        // Store the fetched data
         this.chartData = data.recordsets[0];
 
-        // Create chart once data is fetched
+        // Create the chart
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -35,8 +39,10 @@ export default {
     },
     createChart() {
       if (this.chartData) {
+        // Get the context of the canvas
         const ctx = this.$refs.chartCanvas.getContext('2d');
 
+        // Create a new chart
         this.chart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -89,14 +95,10 @@ export default {
 </script>
 
 <style scoped>
-
-
-.chart1
-{
+/* Styles for the chart container */
+.chart1 {
   width: 100%;
   height: 100%;
   margin: 0 auto;
-
 }
-
 </style>

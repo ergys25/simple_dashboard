@@ -3,10 +3,10 @@
     <div class="container">
       <h1 class="logo">Lorem Ipsum</h1>
       <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><router-link :to="{ name: 'Dashboard' }">Dashboard</router-link></li>
+        <li><router-link :to="{ name: 'About' }">About</router-link></li>
+        <li><router-link :to="{ name: 'Services' }">Services</router-link></li>
+        <li><router-link :to="{ name: 'Contact' }">Contact</router-link></li>
       </ul>
     </div>
   </nav>
@@ -20,8 +20,8 @@ export default {
 
 <style scoped>
 .navbar {
-  background-color: #333; /* Dark background color */
-  color: #fff; /* White text color */
+  background-color: #333;
+  color: #fff;
   padding: 10px 0;
 }
 

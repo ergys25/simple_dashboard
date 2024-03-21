@@ -24,19 +24,14 @@
 </template>
 
 <script>
-import Header from "./Header.vue";
-import Sidebar from './Sidebar.vue';
-import Footer from './Footer.vue';
-import Chart1 from './Chart1.vue';
-import Chart2 from './Chart2.vue';
-import Chart3 from './Chart3.vue';
-import Chart4 from './Chart4.vue';
+
+import Chart1 from '../components/Chart1.vue';
+import Chart2 from '../components/Chart2.vue';
+import Chart3 from '../components/Chart3.vue';
+import Chart4 from '../components/Chart4.vue';
 
 export default {
   components: {
-    Header,
-    Sidebar,
-    Footer,
     Chart1,
     Chart2,
     Chart3,
@@ -84,9 +79,9 @@ export default {
 
 .chart-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* Display the charts in a 2x2 grid */
   grid-gap: 20px;
-  max-width: 1200px;
+  max-width: 1200px; /* Adjust the max width based on your layout */
   width: 100%;
   justify-content: center;
 }
@@ -96,7 +91,7 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 20px; /* Increase padding to make the items larger */
   transition: all 0.3s;
 }
 
@@ -107,7 +102,7 @@ export default {
 
 @media only screen and (max-width: 600px) {
   .chart-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr); /* Change to one column for phones */
   }
 }
 </style>

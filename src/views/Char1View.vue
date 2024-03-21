@@ -1,6 +1,6 @@
 <template>
-  <div class="chart2">
-    <canvas ref="chartCanvas" width="800" height="400"></canvas>
+  <div class="chart-container">
+    <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
@@ -21,7 +21,7 @@ export default {
     async fetchChartData() {
       try {
         // Make API call to fetch data
-        const response = await fetch('http://178.18.253.143:8080/sp-api/spr_TopXVesselsDeadTime/15');
+        const response = await fetch('http://178.18.253.143:8080/sp-api/spr_topXLaytime/2024-02-01%2000:00:00&2024-02-29%2000:00:00&15');
         const data = await response.json();
 
         // Extracting data from the response
@@ -40,20 +40,35 @@ export default {
         this.chart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: this.chartData.map(item => item.VNAME),
+            labels: this.chartData.map(item => item.Vessel),
             datasets: [
               {
-                label: 'General Avg Dead Time Per Berthing (hours)',
-                data: this.chartData.map(item => item.GenAvgDeadTimePerBerthing),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                label: 'Total Laytime',
+                data: this.chartData.map(item => item.TotalLaytime),
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+              },
+              {
+                label: 'Average Laytime',
+                data: this.chartData.map(item => item.AvgLaytime),
+                backgroundColor: 'rgba(255, 99, 132, 0.6)'
               }
             ]
           },
           options: {
             scales: {
+              x: {
+                stacked: true,
+                grid: {
+                  display: false
+                }
+              },
               y: {
+                stacked: true,
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.1)'
+                },
                 ticks: {
-                  callback: function(value) {
+                  callback: function (value) {
                     return value + 'h';
                   }
                 }
@@ -61,7 +76,8 @@ export default {
             },
             plugins: {
               legend: {
-                display: false
+                display: true,
+                position: 'bottom'
               }
             }
           }
@@ -73,10 +89,14 @@ export default {
 </script>
 
 <style scoped>
-.chart2 {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-
+.chart-container {
+  width: 90%;
+  height: 90%;
+  max-width: 800px;
+  max-height: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
