@@ -21,7 +21,7 @@ export default {
     async fetchChartData() {
       try {
         // Make API call to fetch data
-        const response = await fetch('http://178.18.253.143:8080/sp-api/spr_TopXVesselsDeadTime/15');
+        const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart2.json');
         const data = await response.json();
 
         // Extracting data from the response

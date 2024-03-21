@@ -21,7 +21,7 @@ export default {
     async fetchChartData() {
       try {
         // Make API call to fetch data
-        const response = await fetch('http://178.18.253.143:8080/sp-api/spr_topXLaytime/2024-02-01%2000:00:00&2024-02-29%2000:00:00&15');
+        const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart1.json');
         const data = await response.json();
 
         // Extracting data from the response
