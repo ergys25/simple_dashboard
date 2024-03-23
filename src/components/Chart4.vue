@@ -20,14 +20,9 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // Make API call to fetch data
         const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart4.json');
         const data = await response.json();
-
-        // Extracting data from the response
         this.chartData = data.recordsets[0][0];
-
-        // Create chart once data is fetched
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -36,7 +31,6 @@ export default {
     createChart() {
       if (this.chartData) {
         const ctx = this.$refs.chartCanvas.getContext('2d');
-
         this.chart = new Chart(ctx, {
           type: 'pie',
           data: {
@@ -64,10 +58,15 @@ export default {
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false, // To make the chart responsive
+            maintainAspectRatio: true,
             plugins: {
               legend: {
-                position: 'bottom'
+                position: 'top',
+                align: 'start', // Change this to 'center' or 'end' as needed
+                labels: {
+                  boxWidth: 20, // Adjust as needed
+                  padding: 5 // Adjust as needed
+                }
               },
               title: {
                 display: true,
@@ -83,12 +82,9 @@ export default {
 </script>
 
 <style scoped>
-
 .chart4 {
   width: 100%;
   height: 100%;
   margin: 0 auto;
-
 }
-
 </style>

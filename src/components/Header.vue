@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar">
     <div class="container">
-      <h1 class="logo">Lorem Ipsum</h1>
+      <img class="logo" src='../assets/logo.svg' alt="Logo">
+<!--      <h1 class="logo">Lorem Ipsum</h1>-->
       <ul class="nav-links">
         <li><router-link :to="{ name: 'Dashboard' }">Dashboard</router-link></li>
         <li><router-link :to="{ name: 'About' }">About</router-link></li>
@@ -36,7 +37,9 @@ export default {
 
 .logo {
   margin: 0;
-  font-size: 24px;
+  height:30px;
+  width:30px;
+
 }
 
 .nav-links {
