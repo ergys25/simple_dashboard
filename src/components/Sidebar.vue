@@ -4,11 +4,12 @@
       <h2>Simple Dashboard</h2>
     </div>
     <ul class="nav-links">
-      <li><router-link :to="{ name: 'Chart1' }">Chart 1</router-link></li>
-      <li><router-link :to="{ name: 'Chart2' }">Chart 2</router-link></li>
-      <li><router-link :to="{ name: 'Chart3' }">Chart 3</router-link></li>
-      <li><router-link :to="{ name: 'Chart4' }">Chart 4</router-link></li>
+      <li><router-link :to="{ name: 'Chart1' }" exact>Chart 1</router-link></li>
+      <li><router-link :to="{ name: 'Chart2' }" exact>Chart 2</router-link></li>
+      <li><router-link :to="{ name: 'Chart3' }" exact>Chart 3</router-link></li>
+      <li><router-link :to="{ name: 'Chart4' }" exact>Chart 4</router-link></li>
     </ul>
+    <div class="expand-arrow" :class="{ 'active': sidebarVisible }"></div>
   </aside>
 </template>
 
@@ -29,6 +30,15 @@ export default {
 </script>
 
 <style scoped>
+
+
+.nav-links{
+  font-family:Roboto,serif;
+  font-size:20px;
+  font-weight:500;
+  color:white;
+
+}
 .sidebar {
   background-color: #2c3e50;
   color: #fff;
@@ -39,6 +49,7 @@ export default {
   left: -250px;
   transition: left 0.3s ease;
   padding: 20px;
+  z-index: 1000;
 }
 
 .sidebar.active {
@@ -62,23 +73,59 @@ export default {
 .nav-links a {
   text-decoration: none;
   color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .nav-links a:hover {
   text-decoration: underline;
+}
+.logo{
+  font-family:Roboto,serif;
+}
+
+.expand-arrow {
+  position: absolute;
+
+  top: 50%;
+  right: 20px;
+  transform:translateX(+50%) translateY(-50%) rotate(90deg);
+  width: 30px;
+  height: 30px;
+  background-color: #2c3e50;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.expand-arrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+  transition: transform 0.3s ease;
 }
 
 .sidebar:hover .nav-links a {
   opacity: 1;
 }
 
-.sample-text {
-  margin-top: 20px;
+.sidebar:hover .expand-arrow {
+  background-color: #34495e;
 }
 
-.sample-text p {
-  color: #ccc;
+.active .expand-arrow {
+  transform: translateY(-50%) rotate(0deg); /* Rotate to the original position */
+  background-color: #34495e;
+}
+
+.active .expand-arrow::after {
+  transform: translate(-50%, -50%) rotate(-135deg); /* Rotate to point left */
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
 }
 </style>

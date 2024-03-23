@@ -19,7 +19,13 @@ export default {
 };
 </script>
 
+
 <style scoped>
+
+*{
+  font-family : 'Roboto', sans-serif;
+}
+
 .navbar {
   background-color: #333;
   color: #fff;
