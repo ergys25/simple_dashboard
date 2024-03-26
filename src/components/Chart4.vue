@@ -32,7 +32,7 @@ export default {
       if (this.chartData) {
         const ctx = this.$refs.chartCanvas.getContext('2d');
         this.chart = new Chart(ctx, {
-          type: 'pie',
+          type: 'doughnut',
           data: {
             labels: ['Session Time', 'Laytime', 'Connection Time', 'Transfer Time', 'Dead Time', 'Mooring Time', 'Unmooring Time'],
             datasets: [{
@@ -62,17 +62,18 @@ export default {
             plugins: {
               legend: {
                 position: 'top',
-                align: 'start', // Change this to 'center' or 'end' as needed
+                align: '',
                 labels: {
-                  boxWidth: 20, // Adjust as needed
-                  padding: 5 // Adjust as needed
+                  boxWidth: 20,
+                  padding: 5
                 }
               },
               title: {
                 display: true,
                 text: 'Various Metrics'
               }
-            }
+            },
+            cutout: '80%',
           }
         });
       }

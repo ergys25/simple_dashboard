@@ -1,10 +1,12 @@
 <template>
+  <!-- Chart container -->
   <div class="chart3-container">
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
 <script>
+// Importing Chart.js library
 import Chart from 'chart.js/auto';
 
 export default {
@@ -20,11 +22,10 @@ export default {
   methods: {
     async fetchChartData() {
       try {
+        // Fetch data from the provided URL
         const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart3.json');
         const data = await response.json();
-
         this.chartData = data.recordsets[0];
-
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -34,6 +35,7 @@ export default {
       if (this.chartData) {
         const ctx = this.$refs.chartCanvas.getContext('2d');
 
+        // Create a line chart using Chart.js
         this.chart = new Chart(ctx, {
           type: 'line',
           data: {
@@ -58,8 +60,8 @@ export default {
               },
               y: {
                 ticks: {
-                  callback: function(value) {
-                    return (value * 100).toFixed(2) + '%';
+                  callback: function (value) {
+                    return (value * 100).toFixed(2) + '%'; // Display values as percentages
                   }
                 }
               }
@@ -79,6 +81,7 @@ export default {
 </script>
 
 <style scoped>
+/* Style for the chart container */
 .chart3-container {
   width: 90%;
   height: 90%;

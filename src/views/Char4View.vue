@@ -1,10 +1,12 @@
 <template>
+  <!-- Chart container -->
   <div class="chart4-container">
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
 <script>
+// Importing Chart.js library
 import Chart from 'chart.js/auto';
 
 export default {
@@ -20,14 +22,10 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // Make API call to fetch data
+        // Fetch data from the provided URL
         const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart4.json');
         const data = await response.json();
-
-        // Extracting data from the response
         this.chartData = data.recordsets[0][0];
-
-        // Create chart once data is fetched
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -37,8 +35,9 @@ export default {
       if (this.chartData) {
         const ctx = this.$refs.chartCanvas.getContext('2d');
 
+        // Create a doughnut chart using Chart.js
         this.chart = new Chart(ctx, {
-          type: 'pie',
+          type: 'doughnut',
           data: {
             labels: ['Session Time', 'Laytime', 'Connection Time', 'Transfer Time', 'Dead Time', 'Mooring Time', 'Unmooring Time'],
             datasets: [{
@@ -64,7 +63,7 @@ export default {
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false, // To make the chart responsive
+            maintainAspectRatio: false,
             plugins: {
               legend: {
                 position: 'bottom'
@@ -73,7 +72,8 @@ export default {
                 display: true,
                 text: 'Various Metrics'
               }
-            }
+            },
+            cutout: '80%'
           }
         });
       }
@@ -83,9 +83,10 @@ export default {
 </script>
 
 <style scoped>
+/* Style for the chart container */
 .chart4-container {
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   max-width: 800px;
   max-height: 600px;
   position: absolute;

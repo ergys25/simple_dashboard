@@ -1,9 +1,20 @@
 <template>
+  <!-- Dashboard layout -->
   <div>
+    <!-- Header -->
+    <Header />
+
+    <!-- Main content -->
     <div class="dashboard">
+      <!-- Sidebar -->
+      <Sidebar />
+
+      <!-- Content area -->
       <div class="content">
         <div class="main">
+          <!-- Chart grid -->
           <div class="chart-grid">
+            <!-- Individual chart containers -->
             <div class="chart-container">
               <Chart1 />
             </div>
@@ -19,6 +30,9 @@
           </div>
         </div>
       </div>
+
+      <!-- Footer -->
+      <Footer />
     </div>
   </div>
 </template>
@@ -63,6 +77,7 @@ export default {
 </script>
 
 <style scoped>
+/* Dashboard layout */
 .dashboard {
   display: flex;
   min-height: 100vh;
@@ -82,6 +97,7 @@ export default {
   width: 100%;
 }
 
+/* Chart grid */
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -105,6 +121,7 @@ export default {
   height: 100%;
 }
 
+/* Responsive design */
 @media only screen and (max-width: 600px) {
   .chart-grid {
     grid-template-columns: repeat(1, 1fr);

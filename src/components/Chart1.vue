@@ -13,25 +13,20 @@ import Chart from 'chart.js/auto';
 export default {
   data() {
     return {
-      chart: null, // Will hold the chart instance
-      chartData: null // Will hold the fetched data
+      chart: null,
+      chartData: null
     };
   },
   mounted() {
-    // Fetch chart data when component is mounted
     this.fetchChartData();
   },
   methods: {
     async fetchChartData() {
       try {
-        // Fetch data from the API
+        // Fetch data from the provided URL
         const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart1.json');
         const data = await response.json();
-
-        // Store the fetched data
         this.chartData = data.recordsets[0];
-
-        // Create the chart
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -39,10 +34,7 @@ export default {
     },
     createChart() {
       if (this.chartData) {
-        // Get the context of the canvas
         const ctx = this.$refs.chartCanvas.getContext('2d');
-
-        // Create a new chart
         this.chart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -75,7 +67,7 @@ export default {
                 },
                 ticks: {
                   callback: function (value) {
-                    return value + 'h'; // Add 'h' to the tick value to denote hours
+                    return value + 'h'; // Display hours next to y-axis values
                   }
                 }
               }
@@ -95,7 +87,6 @@ export default {
 </script>
 
 <style scoped>
-/* Styles for the chart container */
 .chart1 {
   width: 100%;
   height: 100%;

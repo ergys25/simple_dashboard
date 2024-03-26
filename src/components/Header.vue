@@ -2,7 +2,6 @@
   <nav class="navbar">
     <div class="container">
       <img class="logo" src='../assets/logo.svg' alt="Logo">
-<!--      <h1 class="logo">Lorem Ipsum</h1>-->
       <ul class="nav-links">
         <li><router-link :to="{ name: 'Dashboard' }">Dashboard</router-link></li>
         <li><router-link :to="{ name: 'About' }">About</router-link></li>

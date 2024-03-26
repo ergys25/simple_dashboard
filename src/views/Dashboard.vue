@@ -79,9 +79,9 @@ export default {
 
 .chart-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Display the charts in a 2x2 grid */
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 20px;
-  max-width: 1200px; /* Adjust the max width based on your layout */
+  max-width: 1200px;
   width: 100%;
   justify-content: center;
 }
@@ -91,7 +91,7 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px; /* Increase padding to make the items larger */
+  padding: 20px;
   transition: all 0.3s;
 }
 
@@ -102,7 +102,7 @@ export default {
 
 @media only screen and (max-width: 600px) {
   .chart-grid {
-    grid-template-columns: repeat(1, 1fr); /* Change to one column for phones */
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
+  <!-- Chart container -->
   <div class="chart-container">
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
 <script>
+// Importing Chart.js library
 import Chart from 'chart.js/auto';
 
 export default {
@@ -20,14 +22,10 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // Make API call to fetch data
+        // Fetch data from the provided URL
         const response = await fetch('https://raw.githubusercontent.com/ergys25/simple-dashboard-api/main/chart1.json');
         const data = await response.json();
-
-        // Extracting data from the response
         this.chartData = data.recordsets[0];
-
-        // Create chart once data is fetched
         this.createChart();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -37,6 +35,7 @@ export default {
       if (this.chartData) {
         const ctx = this.$refs.chartCanvas.getContext('2d');
 
+        // Create a bar chart using Chart.js
         this.chart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -69,7 +68,7 @@ export default {
                 },
                 ticks: {
                   callback: function (value) {
-                    return value + 'h';
+                    return value + 'h'; // Display hours next to y-axis values
                   }
                 }
               }
@@ -89,6 +88,7 @@ export default {
 </script>
 
 <style scoped>
+/* Style for the chart container */
 .chart-container {
   width: 90%;
   height: 90%;

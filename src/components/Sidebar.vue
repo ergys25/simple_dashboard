@@ -119,12 +119,12 @@ export default {
 }
 
 .active .expand-arrow {
-  transform: translateY(-50%) rotate(0deg); /* Rotate to the original position */
+  transform: translateY(-50%) rotate(0deg);
   background-color: #34495e;
 }
 
 .active .expand-arrow::after {
-  transform: translate(-50%, -50%) rotate(-135deg); /* Rotate to point left */
+  transform: translate(-50%, -50%) rotate(-135deg);
   border-top: 2px solid #fff;
   border-right: 2px solid #fff;
 }
